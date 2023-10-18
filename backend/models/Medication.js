@@ -26,7 +26,7 @@ const MedicationSchema = new Schema(
     },
     doctorType: {
       type: String,
-      required: [false, 'Please provide details'],
+      required: [false, 'Please provide doctor type'],
       trim: true,
     },
     mediStatus: {
