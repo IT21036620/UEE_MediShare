@@ -16,10 +16,6 @@ import {
 
 import uploadMiddleware from '../middleware/cloudinary.js'
 
-// router
-//   .route('/')
-//   .get(getAllItems)
-//   .post(uploadMiddleware.single('image'), createItem)
 router
   .route('/')
   .get(getAllUsers)
@@ -27,7 +23,6 @@ router
 router
   .route('/:id')
   .get(getUserById)
-  // .patch(uploadMiddleware.single('image'), updateItem)
   .patch(uploadMiddleware.single('profile_image'), updateUserById)
   .delete(deleteUserById)
 router.route('/login').post(login)
