@@ -43,7 +43,9 @@ const createMedicineRequest = asyncWrapper(async (req, res) => {
 })
 
 const getAllMedicineRequests = asyncWrapper(async (req, res) => {
-  const medicineRequest = await MedicineRequest.find({}).populate('user')
+  const medicineRequest = await MedicineRequest.find({
+    requestStatus: 'Active',
+  }).populate('user')
   res.status(200).json({ medicineRequest })
 })
 
@@ -89,7 +91,7 @@ const updateMedicineRequestById = asyncWrapper(async (req, res) => {
   )
 
   if (!medicineRequest) {
-    return next(createCustomError(`No item with id: ${mrId}`, 404))
+    return next(createCustomError(`No Medicine Request with id: ${mrId}`, 404))
   }
   res.status(200).json({ medicineRequest })
 })

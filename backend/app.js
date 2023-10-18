@@ -9,6 +9,7 @@ import connectDB from './db/connect.js'
 
 import userRouter from './routes/user.js'
 import medicineRequestRouter from './routes/medicineRequest.js'
+import medicinePostRouter from './routes/medicinePost.js'
 
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
@@ -34,6 +35,7 @@ app.use('/uploads', express.static('uploads'))
 // Define your routes
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/request', medicineRequestRouter)
+app.use('/api/v1/post', medicinePostRouter)
 
 // Error handling middleware
 app.use(notFoundMiddleware)
