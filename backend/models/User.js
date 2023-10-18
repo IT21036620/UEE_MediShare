@@ -1,6 +1,8 @@
-import { Schema, model } from 'mongoose'
-import { genSalt, hash, compare } from 'bcryptjs'
-import { sign } from 'jsonwebtoken'
+import mongoose from 'mongoose'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+
+const { Schema, model } = mongoose
 
 const UserSchema = new Schema({
   firstName: {
@@ -33,7 +35,7 @@ const UserSchema = new Schema({
     minlength: 6,
   },
   phone: {
-    type: Number,
+    type: String,
     required: [false, 'Please provide contact number'],
     min: [
       9,
@@ -51,18 +53,22 @@ const UserSchema = new Schema({
 })
 
 UserSchema.pre('save', async function () {
-  const salt = await genSalt(10)
-  this.password = await hash(this.password, salt)
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
 })
 
 UserSchema.methods.createJWT = function () {
-  return sign({ userId: this._id, name: this.name }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  })
+  return jwt.sign(
+    { userId: this._id, name: this.name },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_LIFETIME,
+    }
+  )
 }
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
-  const isMatch = await compare(candidatePassword, this.password)
+  const isMatch = await bcrypt.compare(candidatePassword, this.password)
   return isMatch
 }
 

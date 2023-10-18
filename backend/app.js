@@ -7,7 +7,7 @@ import xss from 'xss-clean'
 
 import connectDB from './db/connect.js'
 
-// import itemRouter from './routes/item.js'
+import userRouter from './routes/user.js'
 
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
@@ -38,7 +38,7 @@ app.use('/uploads', express.static('uploads'))
 // })
 
 // Define your routes
-// app.use('/api/v1/seller', sellerRouter)
+app.use('/api/v1/user', userRouter)
 
 // Error handling middleware
 app.use(notFoundMiddleware)

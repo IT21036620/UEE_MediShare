@@ -2,30 +2,34 @@ import express from 'express'
 const router = express.Router()
 
 import {
-  getAllItems,
-  getItemByCategory,
-  createItem,
-  getItem,
-  deleteItem,
-  updateItem,
-  changeItemRatingByID,
-} from '../controllers/item.js'
+  login,
+  getAllUsers,
+  createUser,
+  getUserById,
+  updateUserById,
+  deleteUserById,
+} from '../controllers/User.js'
 
 // middleware for routes
 // const authenticateSeller = require('../middleware/authentication')
 // const upload = require('../middleware/upload')
+
 import uploadMiddleware from '../middleware/cloudinary.js'
 
+// router
+//   .route('/')
+//   .get(getAllItems)
+//   .post(uploadMiddleware.single('image'), createItem)
 router
   .route('/')
-  .get(getAllItems)
-  .post(uploadMiddleware.single('image'), createItem)
+  .get(getAllUsers)
+  .post(uploadMiddleware.single('profile_image'), createUser)
 router
   .route('/:id')
-  .get(getItem)
-  .patch(uploadMiddleware.single('image'), updateItem)
-  .delete(deleteItem)
-router.route('/itemRating/:id').patch(changeItemRatingByID)
-router.route('/category/:id').get(getItemByCategory)
+  .get(getUserById)
+  // .patch(uploadMiddleware.single('image'), updateItem)
+  .patch(uploadMiddleware.single('profile_image'), updateUserById)
+  .delete(deleteUserById)
+router.route('/login').post(login)
 
 export default router

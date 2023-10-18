@@ -1,168 +1,129 @@
 import User from '../models/User.js'
-import { genSalt, hash } from 'bcryptjs'
-import asyncWrapper from '../middleware/async'
-import { createCustomError } from '../errors/custom-error'
+import bcrypt from 'bcryptjs'
+import asyncWrapper from '../middleware/async.js'
+import { createCustomError } from '../errors/custom-error.js'
+import cloudinary from '../config/cloudinary.js'
 import { StatusCodes } from 'http-status-codes'
-import { BadRequestError, UnauthenticatedError } from '../errors'
+import BadRequestError from '../errors/bad-request.js'
+import UnauthenticatedError from '../errors/unauthenticated.js'
 
-// seller register with jwt token
-const register = async (req, res) => {
-  // checking for the seller profile image
-  if (req.file) {
-    req.body.profile_image = req.file.path
-  } else {
-    req.body.profile_image = 'uploads\\default.jpg'
-  }
-  const seller = await User.create({ ...req.body })
-
-  const token = seller.createJWT()
-  res.status(StatusCodes.CREATED).json({
-    seller: {
-      seller_name: seller.name,
-      email: seller.email,
-      company_name: seller.company_name,
-      contact: seller.phone,
-    },
-    token,
-  })
-}
-
-// seller login with validating credentials and generating jwt token
 const login = async (req, res) => {
   const { email, password } = req.body
 
   if (!email || !password) {
     throw new BadRequestError('Please provide email and password')
   }
-  const seller = await User.findOne({ email })
-  if (!seller) {
+  const user = await User.findOne({ email })
+  if (!user) {
     throw new UnauthenticatedError('Invalid email')
   }
 
   // compare password
-  const isPasswordCorrect = await seller.comparePassword(password)
+  const isPasswordCorrect = await user.comparePassword(password)
   if (!isPasswordCorrect) {
     throw new UnauthenticatedError('Invalid password')
   }
 
-  const token = seller.createJWT()
+  const token = user.createJWT()
   res.status(StatusCodes.OK).json({
-    seller: {
-      seller_name: seller.name,
-      email: seller.email,
-      company_name: seller.company_name,
-    },
+    user,
     token,
   })
 }
 
-//using errors custom-error.js for createCustomError
-//get a seller by id
-const getSellerByID = asyncWrapper(async (req, res, next) => {
-  const { id: sellerID } = req.params
-  const seller = await User.findOne({ _id: sellerID })
+const createUser = asyncWrapper(async (req, res) => {
+  const { firstName, lastName, email, password, phone, birthDate } = req.body
+  const file = req.file
 
-  if (!seller) {
-    return next(createCustomError(`No seller with id: ${sellerID}`, 404))
-  }
-  res.status(200).json({ seller })
-})
+  let profile_image
 
-// get all products created by the seller
-const getAllProductsBySeller = async (req, res) => {
-  const products = await Product.find({ createdBy: req.user.userId }).sort(
-    'createdAt'
-  )
-  res.status(StatusCodes.OK).json({ products, count: products.length })
-}
-
-//using errors custom-error.js for createCustomError
-//delete a seller by id
-const deleteSeller = asyncWrapper(async (req, res, next) => {
-  const { id: sellerID } = req.params
-  const seller = await User.findOneAndDelete({ _id: sellerID })
-  if (!seller) {
-    return next(createCustomError(`No Seller with id: ${sellerID}`, 404))
-  }
-  res.status(200).json({ seller })
-})
-
-//using errors custom-error.js for createCustomError
-//update a seller by id
-const updateSeller = asyncWrapper(async (req, res, next) => {
-  const { id: sellerID } = req.params
-  if (req.file) {
-    req.body.profile_image = req.file.path
+  if (file) {
+    try {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: 'uee',
+      })
+      profile_image = result.secure_url
+    } catch (error) {
+      console.error('Error uploading image to Cloudinary:', error)
+      profile_image =
+        'https://res.cloudinary.com/dbcmklrpv/image/upload/v1684347067/default_uz60rr.jpg'
+    }
   } else {
-    req.body.profile_image = 'uploads\\default.jpg'
+    //set a default image URL
+    profile_image =
+      'https://res.cloudinary.com/dbcmklrpv/image/upload/v1684347067/default_uz60rr.jpg'
   }
-  const seller = await User.findOneAndUpdate(
-    { _id: sellerID },
-    { ...req.body },
-    {
-      new: true,
-      runValidators: true,
-    }
-  )
 
-  // update password with bcrypt
-  var upPassword = async function () {
-    const salt = await genSalt(10)
-    seller.password = await hash(req.body.password, salt)
+  try {
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      phone,
+      birthDate,
+      profile_image,
+    })
+
+    await user.save()
+    const token = user.createJWT()
+    res.status(201).json({ user, token })
+  } catch (error) {
+    console.error('Error saving user:', error)
+    res.status(500).send('Server error')
   }
-  upPassword()
-  seller.save()
+})
 
-  const token = seller.createJWT()
-  res.status(StatusCodes.OK).json({
-    seller: {
-      seller_name: seller.name,
-      email: seller.email,
-      company_name: seller.company_name,
-      contact: seller.phone,
-    },
-    token,
+const getAllUsers = asyncWrapper(async (req, res) => {
+  const users = await User.find({})
+  res.status(200).json({ users })
+})
+
+const getUserById = asyncWrapper(async (req, res, next) => {
+  const { id: userId } = req.params
+  const user = await User.find({ _id: userId })
+
+  if (!user) {
+    return next(createCustomError(`No User with id: ${userId}`, 404))
+  }
+  res.status(200).json({ user })
+})
+
+const updateUserById = asyncWrapper(async (req, res) => {
+  const { id: userId } = req.params
+
+  if (req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'spm',
+    })
+    req.body.profile_image = result.secure_url
+  }
+  const user = await User.findByIdAndUpdate({ _id: userId }, req.body, {
+    new: true,
   })
-  if (!seller) {
-    return next(createCustomError(`No Seller with id: ${sellerID}`, 404))
+
+  const token = user.createJWT()
+  if (!user) {
+    return next(createCustomError(`No item with id: ${userId}`, 404))
   }
+  res.status(200).json({ user, token })
 })
 
-/*
-//update seller rating by id
-const changeSellerRatingByID = asyncWrapper(async (req, res, next) => {
-  const { id: sellerID } = req.params
-  const seller = await User.findOneAndUpdate(
-    { _id: sellerID },
-    req.body.rating,
-    {
-      new: true,
-      runValidators: true,
-    }
-  )
-  var changeRating = async function () {
-    seller.rating = req.body.rating
-    seller.rate_count = seller.rate_count + 1
-    seller.rate_aggregate = seller.rate_aggregate + seller.rating
-    var newRating = seller.rate_aggregate / seller.rate_count
-
-    seller.rating = parseFloat(newRating).toFixed(2) //newRating
-    seller.save()
+const deleteUserById = asyncWrapper(async (req, res) => {
+  const { id: userId } = req.params
+  const user = await User.findOneAndDelete({ _id: userId })
+  if (!user) {
+    return next(createCustomError(`No User with this id: ${userId}`, 404))
   }
-  changeRating()
 
-  if (!seller) {
-    return next(createCustomError(`No seller with id: ${sellerID}`, 404))
-  }
-  res.status(200).json(`Rating successfully updated`)
+  res.status(200).json({ user })
 })
 
-*/
-export default {
-  register,
+export {
   login,
-  getSellerByID,
-  getAllProductsBySeller,
-  deleteSeller,
-  updateSeller,
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById,
 }
