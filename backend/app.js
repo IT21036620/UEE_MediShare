@@ -10,6 +10,7 @@ import connectDB from './db/connect.js'
 import userRouter from './routes/user.js'
 import medicineRequestRouter from './routes/medicineRequest.js'
 import medicinePostRouter from './routes/medicinePost.js'
+import medicationRouter from './routes/medication.js'
 
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
@@ -36,6 +37,7 @@ app.use('/uploads', express.static('uploads'))
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/request', medicineRequestRouter)
 app.use('/api/v1/post', medicinePostRouter)
+app.use('/api/v1/history', medicationRouter)
 
 // Error handling middleware
 app.use(notFoundMiddleware)
