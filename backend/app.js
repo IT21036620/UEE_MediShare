@@ -8,6 +8,7 @@ import xss from 'xss-clean'
 import connectDB from './db/connect.js'
 
 import userRouter from './routes/user.js'
+import medicineRequestRouter from './routes/medicineRequest.js'
 
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
@@ -30,15 +31,9 @@ app.use(cors())
 app.use(xss())
 app.use('/uploads', express.static('uploads'))
 
-//Test Client IP
-// app.use((req, res, next) => {
-//   const clientIP = req.ip
-//   console.log(`Client IP: ${clientIP}`)
-//   next()
-// })
-
 // Define your routes
 app.use('/api/v1/user', userRouter)
+app.use('/api/v1/request', medicineRequestRouter)
 
 // Error handling middleware
 app.use(notFoundMiddleware)
