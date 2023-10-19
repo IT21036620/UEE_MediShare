@@ -3,31 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  FlatList,
   TextInput,
-  Button,
+  TouchableOpacity,
 } from 'react-native'
 
-export default function App() {
-  const reminders = [
-    {
-      time: '08:30 A.M',
-      date: '28/09/2023',
-      doctor: 'Dr. Kasun Perera',
-      specialty: 'Endocrinologist',
-      appointmentType: 'Diabetes Checkup',
-    },
-    {
-      time: '11:30 A.M',
-      date: '25/09/2023',
-      doctor: 'Dr. Milyuru Nimesh',
-      specialty: 'Dermatologist',
-      appointmentType: 'Skin Treatment',
-    },
-    // ... add other reminders here
-  ]
-
+export default function AddNewMedication() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Add New Medication</Text>
