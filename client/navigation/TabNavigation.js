@@ -3,13 +3,14 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/HomeScreen.js';
-import RecordNavigator from './RecordNavigator.js';
+
 // import Records from '../screens/Records.js';
 // import Reminders from '../screens/Reminders.js';
 // import MediShare from '../screens/MediShare.js';
 import Profile from '../screens/ProfileScreen.js';
 import HomeNavigator from './HomeNavigator.js';
-
+import RecordNavigator from './RecordNavigator.js';
+import RemindersNavigator from './RemindersNavigator.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
@@ -39,7 +40,7 @@ const TabNavigation = () => {
         />
         <Tab.Screen
           name="Reminders"
-          component={Home}
+          component={RemindersNavigator}
           options={{
             tabBarIcon: ({color, size}) => (
               <MaterialCommunityIcons name="calendar" size={size} color={color} />
