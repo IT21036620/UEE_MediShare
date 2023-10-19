@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View ,Button} from 'react-native'
 import React from 'react'
 
-const Home = () => {
+function ProfileScreen() {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>Profile</Text>
       <Button
         title="Go to Another"
         onPress={() => navigation.navigate('Profile')}
@@ -13,6 +12,4 @@ const Home = () => {
   )
 }
 
-export default Home
-
-const styles = StyleSheet.create({})
+export default ProfileScreen
