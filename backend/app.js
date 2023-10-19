@@ -13,6 +13,7 @@ import medicinePostRouter from './routes/medicinePost.js'
 import medicationRouter from './routes/medication.js'
 import appointmentRouter from './routes/appointment.js'
 import prescriptionReminderRouter from './routes/prescriptionReminders.js'
+import medicineStockRouter from './routes/medicineStock.js'
 
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
@@ -42,6 +43,7 @@ app.use('/api/v1/post', medicinePostRouter)
 app.use('/api/v1/history', medicationRouter)
 app.use('/api/v1/appointment', appointmentRouter)
 app.use('/api/v1/reminder', prescriptionReminderRouter)
+app.use('/api/v1/stock', medicineStockRouter)
 
 // Error handling middleware
 app.use(notFoundMiddleware)
