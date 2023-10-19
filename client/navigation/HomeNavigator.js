@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
+//import Home from '../components/mediShare/Home';
 import ProfileScreen from '../screens/ProfileScreen';
 import { Sample } from '../screens/Sample';
 import { Sample2 } from '../screens/Sample2';

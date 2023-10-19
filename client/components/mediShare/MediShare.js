@@ -1,97 +1,146 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, Button, ScrollView, TouchableOpacity,StyleSheet } from 'react-native';
+import axios from 'axios';
+import { Picker } from '@react-native-picker/picker';
 
-export default function MediShare() {
+const MediShareScreen = ({ navigation }) => {
+  const [posts, setPosts] = useState([]);
+  const [sortOrder, setSortOrder] = useState('Most Recent'); // default sort order
+  const [selectedSort, setSelectedSort] = useState('Most Recent');
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get('http://10.0.2.2:4000/api/v1/post');
+      if (response.data && response.data.medicinePost) {
+        setPosts(response.data.medicinePost);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>MediShare</Text>
-      <TouchableOpacity style={styles.myPostsButton}>
-        <Text style={styles.myPostsButtonText}>My posts</Text>
-      </TouchableOpacity>
-      <Text style={styles.subHeader}>
-        Request to find the following Medicine
-      </Text>
-      <Text style={styles.description}>
-        Looking for a medicine called Acetaminophen. If you know where to find
-        this medicine please contact me.
-      </Text>
-      <Image
-        source={{ uri: 'your_image_link_here' }}
-        style={styles.prescriptionImage}
-      />
-      <Text style={styles.date}>22/09/2023</Text>
-      <Text style={styles.userName}>Ayesha de Silva</Text>
-      <Text style={styles.time}>8.30 PM</Text>
-      <TouchableOpacity style={styles.respondButton}>
-        <Text style={styles.respondButtonText}>Respond</Text>
-      </TouchableOpacity>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Myposts')}>
+          <Text style={styles.myPostsText}>My posts</Text>
+        </TouchableOpacity>
+        
+        <Picker
+          selectedValue={selectedSort}
+          style={styles.pickerStyle}
+          onValueChange={(itemValue, itemIndex) => {
+            setSelectedSort(itemValue);
+            // Here you can trigger the API call again with the new sort order or sort the data locally
+          }}>
+          <Picker.Item label="Most Recent" value="Most Recent" />
+          <Picker.Item label="Oldest First" value="Oldest First" />
+          {/* Add more sort options if required */}
+        </Picker>
+
+      </View>
+
+      <ScrollView style={styles.feed}>
+        {posts.map(post => (
+          <Post key={post._id} data={post} navigation={navigation} />
+        ))}
+      </ScrollView>
     </View>
-  )
-}
+  );
+};
+
+const Post = ({ data, navigation }) => {
+  return (
+    <View style={styles.post}>
+      <Text style={styles.postTitle}>{data.title}</Text>
+      <Text style={styles.postDescription}>{data.details}</Text>
+      <Image source={{uri: data.pres_image}} style={styles.prescriptionImage} />
+      <Text style={styles.postDetails}>
+        {data.createdDate} {data.createdTime} - {data.user.firstName} {data.user.lastName}
+      </Text>
+      <Button title="Respond" onPress={() => navigation.navigate('ResponseScreen', { postId: data._id })} />
+    </View>
+  );
+};
+
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#f4f4f4',
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderColor: '#e0e0e0',
   },
-  myPostsButton: {
-    backgroundColor: '#0066FF',
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    alignSelf: 'flex-start',
-    marginBottom: 15,
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    backgroundColor: '#007AFF', // Change this to your desired color
+    borderRadius: 10, // This gives it a rounded shape
+    borderWidth: 2,  // Adding border 
+    borderColor: '#007AFF'  // Border color
   },
-  myPostsButtonText: {
+  myPostsText: {
     color: 'white',
-    fontSize: 16,
-  },
-  subHeader: {
-    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize:19,
   },
-  description: {
-    fontSize: 16,
-    marginBottom: 10,
+  pickerStyle: {
+    width: 170,
+    height: 10,
+    borderColor: '#e0e0e0',
+    backgroundColor:'lightgray',
+    borderRadius: 10,
+  },
+  feed: {
+    marginTop: 16,
+  },
+  post: {
+    padding: 16,
+    backgroundColor: 'white',
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 8,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  postTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  postDescription: {
+    marginTop: 8,
   },
   prescriptionImage: {
     width: '100%',
     height: 200,
-    borderRadius: 10,
-    marginBottom: 10,
+    resizeMode: 'cover',
+    marginTop: 12,
   },
-  date: {
-    fontSize: 14,
-    color: '#7E7E7E',
-    marginBottom: 5,
+  postDetails: {
+    marginTop: 12,
+    color: 'grey',
   },
-  userName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  time: {
-    fontSize: 14,
-    color: '#7E7E7E',
-    marginBottom: 15,
-  },
-  respondButton: {
-    backgroundColor: '#0066FF',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  respondButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-})
+});
+
+
+
+
+
+export default MediShareScreen;
+
