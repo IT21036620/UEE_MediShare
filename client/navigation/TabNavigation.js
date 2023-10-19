@@ -2,12 +2,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from '../screens/Home.js';
-import StackNavigator from './StackNavigator.js';
+import Home from '../screens/HomeScreen.js';
+import RecordNavigator from './RecordNavigator.js';
 // import Records from '../screens/Records.js';
 // import Reminders from '../screens/Reminders.js';
 // import MediShare from '../screens/MediShare.js';
-// import Profile from '../screens/Profile.js';
+import Profile from '../screens/ProfileScreen.js';
+import HomeNavigator from './HomeNavigator.js';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -15,15 +16,12 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     // <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarShowLabel: true,
-          tabBarActiveTintColor: 'black',
-          tabBarInactiveTintColor: 'grey',
-        }}>
+      <Tab.Navigator screenOptions={{
+        headerShown:false,
+      }}>
         <Tab.Screen
           name="Home"
-          component={Home}
+          component={HomeNavigator}
           options={{
             tabBarIcon: ({color, size}) => (
               <MaterialCommunityIcons name="home" size={size} color={color} />
@@ -32,7 +30,7 @@ const TabNavigation = () => {
         />
         <Tab.Screen
           name="Records"
-          component={Home}
+          component={RecordNavigator}
           options={{
             tabBarIcon: ({color, size}) => (
               <MaterialCommunityIcons name="file-document" size={size} color={color} />
@@ -59,7 +57,7 @@ const TabNavigation = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={Home}
+          component={Profile}
           options={{
             tabBarIcon: ({color, size}) => (
               <MaterialCommunityIcons name="account" size={size} color={color} />

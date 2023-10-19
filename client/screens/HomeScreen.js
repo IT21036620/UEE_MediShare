@@ -1,18 +1,18 @@
 import { StyleSheet, Text, View ,Button} from 'react-native'
 import React from 'react'
 
-const Home = () => {
+function HomeScreen({ navigation }) {
   return (
-    <View>
-      <Text>Home</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Welcome to My Medical App</Text>
       <Button
-        title="Go to Another"
+        title="Go to Profile"
         onPress={() => navigation.navigate('Profile')}
       />
     </View>
-  )
+  );
 }
 
-export default Home
+export default HomeScreen
 
 const styles = StyleSheet.create({})
