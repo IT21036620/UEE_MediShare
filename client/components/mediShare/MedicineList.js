@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 
-export default function App() {
+export default function MedicineScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Medicine</Text>

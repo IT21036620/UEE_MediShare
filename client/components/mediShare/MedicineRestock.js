@@ -5,10 +5,20 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from 'react-native'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 export default function MedicineRestock() {
   const [pills, setPills] = useState(2)
+  const [date, setDate] = useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false)
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date
+    setShowDatePicker(Platform.OS === 'ios')
+    setDate(currentDate)
+  }
 
   return (
     <View style={styles.container}>
@@ -46,12 +56,17 @@ export default function MedicineRestock() {
       </View>
 
       <View style={styles.dateContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Expire Date"
-          defaultValue="23.09.2023"
-        />
-        <Text style={styles.calendarIcon}>📅</Text>
+        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+          <Text style={styles.input}>{date.toDateString()}</Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            value={date}
+            mode={'date'}
+            display={Platform.OS === 'android' ? 'default' : 'spinner'}
+            onChange={onChange}
+          />
+        )}
       </View>
 
       <TouchableOpacity style={styles.addButton}>
