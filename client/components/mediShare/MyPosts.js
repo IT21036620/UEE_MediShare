@@ -1,97 +1,75 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native'
+import { Button, Card } from 'react-native-elements'
 
 export default function MyPosts() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>MediShare</Text>
-      <TouchableOpacity style={styles.myPostsButton}>
-        <Text style={styles.myPostsButtonText}>My posts</Text>
-      </TouchableOpacity>
-      <Text style={styles.subHeader}>
-        Request to find the following Medicine
-      </Text>
-      <Text style={styles.description}>
-        Looking for a medicine called Acetaminophen. If you know where to find
-        this medicine please contact me.
-      </Text>
-      <Image
-        source={{ uri: 'your_image_link_here' }}
-        style={styles.prescriptionImage}
-      />
-      <Text style={styles.date}>22/09/2023</Text>
-      <Text style={styles.userName}>Ayesha de Silva</Text>
-      <Text style={styles.time}>8.30 PM</Text>
-      <TouchableOpacity style={styles.respondButton}>
-        <Text style={styles.respondButtonText}>Respond</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>My Posts</Text>
+        <Button title="+ New Request" buttonStyle={styles.newRequestButton} />
+      </View>
+      <View style={styles.dropdown}>
+        <Text style={styles.dropdownText}>Most Recent ▼</Text>
+      </View>
+
+      <Card containerStyle={styles.card}>
+        <Card.Title>Request to find the following Medicine</Card.Title>
+        <Text style={styles.cardDescription}>
+          Looking for a medicine called Acetaminophen. If you know where to find
+          this medicine please contact me.
+        </Text>
+        <Image source={{ uri: 'URL_TO_IMAGE' }} style={styles.image} />
+        <Text style={styles.dateTime}>22/09/2023 8:30 PM</Text>
+        <Button title="Respond" buttonStyle={styles.respondButton} />
+      </Card>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#f5f5f5',
+    padding: 15,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
   },
-  myPostsButton: {
-    backgroundColor: '#0066FF',
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+  newRequestButton: {
+    backgroundColor: '#4a90e2',
+  },
+  dropdown: {
+    marginVertical: 15,
+  },
+  dropdownText: {
+    color: '#4a4a4a',
+    fontSize: 16,
+  },
+  card: {
     borderRadius: 10,
-    alignSelf: 'flex-start',
-    marginBottom: 15,
   },
-  myPostsButtonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  subHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  cardDescription: {
     marginBottom: 10,
+    color: '#4a4a4a',
   },
-  description: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  prescriptionImage: {
+  image: {
     width: '100%',
-    height: 200,
-    borderRadius: 10,
+    height: 150,
+    resizeMode: 'cover',
+    marginVertical: 10,
+  },
+  dateTime: {
+    color: '#9b9b9b',
     marginBottom: 10,
-  },
-  date: {
-    fontSize: 14,
-    color: '#7E7E7E',
-    marginBottom: 5,
-  },
-  userName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  time: {
-    fontSize: 14,
-    color: '#7E7E7E',
-    marginBottom: 15,
   },
   respondButton: {
-    backgroundColor: '#0066FF',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  respondButtonText: {
-    color: 'white',
-    fontSize: 18,
+    backgroundColor: '#4a90e2',
   },
 })
