@@ -22,7 +22,7 @@ export default function RemindersHomeScreen() {
   const navigateToMedicine = () => {
     // Navigate to the appropriate screen for Medicine
     // You should replace 'ScreenName' with the actual screen name.
-    navigation.navigate('Prescription');
+    navigation.navigate('MedicineList');
   };
 
   return (
