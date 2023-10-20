@@ -7,7 +7,7 @@ import MedicineExpiry from '../components/mediShare/MedicineExpiry.js'
 import MedicineList from '../components/mediShare/MedicineList.js'
 import AddNewMedicine from '../components/mediShare/AddNewMedicine.js'
 import MedicineRestock from '../components/mediShare/MedicineRestock.js'
-// import AddPrescriptionReminder from '../components/mediShare/AddPrescriptionReminder.js'
+import AddPrescriptionReminder from '../components/mediShare/AddPrescriptionReminder.js'
 
 const Stack = createNativeStackNavigator()
 
@@ -31,10 +31,10 @@ function RemindersNavigator() {
       <Stack.Screen name="MedicineList" component={MedicineList} />
       <Stack.Screen name="AddNewMedicine" component={AddNewMedicine} />
       <Stack.Screen name="MedicineRestock" component={MedicineRestock} />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="AddPrescriptionReminder"
         component={AddPrescriptionReminder}
-      /> */}
+      />
     </Stack.Navigator>
   )
 }

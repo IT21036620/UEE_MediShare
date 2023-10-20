@@ -13,7 +13,6 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 
 export default function AddNewMedicine() {
   const [pills, setPills] = useState(1)
-
   const [medicineName, setMedicineName] = useState('')
   const [medicineMg, setMedicineMg] = useState('')
   const [expiryDate, setExpiryDate] = useState(new Date())

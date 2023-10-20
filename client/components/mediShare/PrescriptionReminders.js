@@ -11,7 +11,7 @@ import axios from 'axios'
 
 const Icon3 = require('../../assets/img/capsules.png')
 
-export default function PrescriptionReminders() {
+export default function PrescriptionReminders({ navigation }) {
   const [reminders, setReminders] = useState([])
 
   useEffect(() => {
@@ -63,7 +63,10 @@ export default function PrescriptionReminders() {
         ))}
       </ScrollView>
 
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate('AddPrescriptionReminder')}
+      >
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
     </View>
