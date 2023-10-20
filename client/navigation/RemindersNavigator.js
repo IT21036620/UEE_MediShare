@@ -12,7 +12,11 @@ const Stack = createNativeStackNavigator()
 
 function RemindersNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen
         name="RemindersHomeScreen"
         component={RemindersHomeScreen}

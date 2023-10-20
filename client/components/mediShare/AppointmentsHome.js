@@ -1,19 +1,19 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
-export default function Appointments() {
+export default function Appointments({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Appointments</Text>
       </View>
 
-      <TouchableOpacity style={styles.tile}>
+      <TouchableOpacity style={styles.tile} onPress={() => navigation.navigate('AppoinmentReminders')}>
         <Text style={styles.icon}>📋</Text>
         <Text style={styles.tileText}>Appointment Reminders</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.tile}>
+      <TouchableOpacity style={styles.tile} onPress={() => navigation.navigate('AppoinmentReminders')}>
         <Text style={styles.icon}>💊</Text>
         <Text style={styles.tileText}>Medication History</Text>
       </TouchableOpacity>
