@@ -11,7 +11,9 @@ const Stack = createNativeStackNavigator();
 
 function RemindersNavigator() {
   return (
-      <Stack.Navigator >
+      <Stack.Navigator screenOptions={{
+        headerShown:false,
+      }}>
         <Stack.Screen name="RemindersHomeScreen" component={RemindersHomeScreen} />
         <Stack.Screen name="PrescriptionReminders" component={PrescriptionReminders} />
         <Stack.Screen name="MedicineExpiry" component={MedicineExpiry} />

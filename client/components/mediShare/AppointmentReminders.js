@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 
-export default function AppointmentReminders() {
+export default function AppointmentReminders({navigation}) {
   const reminders = [
     {
       time: '08:30 A.M',
@@ -29,7 +29,7 @@ export default function AppointmentReminders() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Appointment Reminders</Text>
-      <TouchableOpacity style={styles.newReminderButton}>
+      <TouchableOpacity style={styles.newReminderButton} onPress={() => navigation.navigate('AddNewReminder')}>
         <Text style={styles.newReminderText}>+ New Reminder</Text>
       </TouchableOpacity>
 
