@@ -11,6 +11,7 @@ import Profile from '../screens/ProfileScreen.js';
 import HomeNavigator from './HomeNavigator.js';
 import RecordNavigator from './RecordNavigator.js';
 import RemindersNavigator from './RemindersNavigator.js';
+import MediShareNavigator from './MediShareNavigator.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
@@ -48,8 +49,8 @@ const TabNavigation = () => {
           }}
         />
         <Tab.Screen
-          name="MediShare"
-          component={Home}
+          name="MediShareNav"
+          component={MediShareNavigator}
           options={{
             tabBarIcon: ({color, size}) => (
               <MaterialCommunityIcons name="account-group" size={size} color={color} />
