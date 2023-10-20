@@ -12,9 +12,7 @@ const Stack = createNativeStackNavigator();
 
 function RecordNavigator() {
   return (
-      <Stack.Navigator screenOptions={{
-        headerShown:false,
-      }}>
+      <Stack.Navigator >
         <Stack.Screen name="AppointmentHome" component={AppointmentHome} />
         <Stack.Screen name="AppoinmentReminders" component={AppoinmentReminders} />
         <Stack.Screen name="AddNewReminder" component={AddNewReminder} />
