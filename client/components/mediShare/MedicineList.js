@@ -93,10 +93,10 @@ const MedicineList = ({ navigation }) => {
       </ScrollView>
 
       <TouchableOpacity
-        style={styles.restockButton}
+        style={styles.newReminderButton}
         onPress={() => navigation.navigate('AddNewMedicine')}
       >
-        <Text style={styles.restockText}>Add New Medicine</Text>
+        <Text style={styles.newReminderText}>+ Add New Medicine</Text>
       </TouchableOpacity>
     </View>
   )
@@ -132,6 +132,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#6f93f2',
+  },
+  newReminderButton: {
+    backgroundColor: '#6f93f2',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  newReminderText: {
+    color: 'white',
+    fontSize: 16,
   },
   medicineDetails: {
     flex: 1, // added to occupy full available width

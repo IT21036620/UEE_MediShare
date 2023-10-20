@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native'
 
-export default function AddPrescriptionReminders() {
+export default function AddPrescriptionReminder() {
   const [frequency, setFrequency] = useState('Daily')
 
   return (

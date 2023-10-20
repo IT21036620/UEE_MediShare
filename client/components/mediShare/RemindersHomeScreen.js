@@ -29,7 +29,28 @@ export default function RemindersHomeScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>REMINDERS</Text>
 
-      <View style={styles.row}>
+      <TouchableOpacity
+        style={styles.tile}
+        onPress={navigateToPrescriptionReminders}
+      >
+        <Image source={Icon1} style={styles.icon} />
+        <Text style={styles.tileText}>Prescription Reminders</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.tile}
+        onPress={navigateToMedicineExpiryAlerts}
+      >
+        <Image source={Icon2} style={styles.icon} />
+        <Text style={styles.tileText}>Medicine Expiry Alerts</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.tile} onPress={navigateToMedicine}>
+        <Image source={Icon3} style={styles.icon} />
+        <Text style={styles.tileText}>Medicine</Text>
+      </TouchableOpacity>
+
+      {/* <View style={styles.row}>
         <TouchableOpacity
           style={[styles.button, styles.halfButton]}
           onPress={navigateToPrescriptionReminders}
@@ -45,14 +66,14 @@ export default function RemindersHomeScreen() {
           <Image source={Icon2} style={styles.icon} />
           <Text style={styles.buttonText}>Medicine Expiry Alerts</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
-      <View style={styles.centerButtonContainer}>
+      {/* <View style={styles.centerButtonContainer}>
         <TouchableOpacity style={styles.button} onPress={navigateToMedicine}>
           <Image source={Icon3} style={styles.icon} />
           <Text style={styles.buttonText}>Medicine</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   )
 }
@@ -66,6 +87,31 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 20,
+    marginTop: 50,
+  },
+  tile: {
+    backgroundColor: '#6f93f2',
+    padding: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+    height: 140,
+    width: 340,
+  },
+  icon: {
+    fontSize: 40,
+    marginBottom: 10,
+  },
+  tileText: {
+    fontSize: 18,
+    color: '#ffffff',
+    textAlign: 'center',
   },
   button: {
     alignItems: 'center',

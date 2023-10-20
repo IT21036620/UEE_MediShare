@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {
   View,
@@ -13,11 +13,12 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 
 export default function MedicineRestock() {
   const [pills, setPills] = useState(1)
-
   const [medicineName, setMedicineName] = useState('')
   const [medicineMg, setMedicineMg] = useState('')
   const [expiryDate, setExpiryDate] = useState(new Date())
   const [showDatePicker, setShowDatePicker] = useState(false)
+
+  const stockID = '6530f525a48b435634e2053c'
 
   const onDateChange = (event, selectedDate) => {
     if (event.type === 'set') {
@@ -33,6 +34,37 @@ export default function MedicineRestock() {
     }
   }
 
+  useEffect(() => {
+    const fetchMedicineData = async () => {
+      try {
+        const response = await axios.get(
+          `http://10.0.2.2:4000/api/v1/stock/${stockID}`
+        )
+        const data = response.data
+        setMedicineName(data.medicineName)
+        setMedicineMg(data.dose)
+        setPills(data.amount)
+        setExpiryDate(new Date(data.exp)) // Assuming the date from API is in a format that's compatible with the JavaScript Date object
+      } catch (error) {
+        console.error('Error fetching medicine data:', error)
+      }
+    }
+
+    fetchMedicineData()
+  }, [])
+
+  const updateMedicine = async () => {
+    try {
+      await axios.put(`http://localhost:4000/api/v1/stock/${stockID}`, {
+        pills: dose,
+        date: exp,
+      })
+      Alert.alert('Success', 'Stock updated successfully.')
+    } catch (error) {
+      console.error('Error updating medicine:', error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Add New Medicine</Text>
@@ -41,14 +73,14 @@ export default function MedicineRestock() {
         style={styles.input}
         placeholder="Medication Name"
         value={medicineName}
-        onChangeText={setMedicineName}
+        editable={false} // Making this field readonly
       />
 
       <TextInput
         style={styles.input}
         placeholder="Medication mg"
         value={medicineMg}
-        onChangeText={setMedicineMg}
+        editable={false} // Making this field readonly
         keyboardType="number-pad"
       />
 
@@ -89,8 +121,8 @@ export default function MedicineRestock() {
         />
       )}
 
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Add</Text>
+      <TouchableOpacity style={styles.addButton} onPress={updateMedicine}>
+        <Text style={styles.addButtonText}>Update</Text>
       </TouchableOpacity>
     </View>
   )
