@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
-export default function MedicineRestock() {
+export default function AddNewMedicine() {
   const [pills, setPills] = useState(1)
 
   const [medicineName, setMedicineName] = useState('')
@@ -30,6 +30,26 @@ export default function MedicineRestock() {
       }
     } else {
       setShowDatePicker(false)
+    }
+  }
+
+  const createMedicine = async () => {
+    try {
+      const response = await axios.post('http://10.0.2.2:4000/api/v1/stock', {
+        user: '652f9f9bb85a626a7ccdbc68',
+        medicineName: medicineName,
+        dose: medicineMg,
+        amount: pills,
+        exp: expiryDate,
+      })
+
+      if (response.status === 200) {
+        // Handle success, e.g., show a success message or navigate somewhere
+      } else {
+        console.error('Error creating medicine:', response.data)
+      }
+    } catch (error) {
+      console.error('Error creating medicine:', error)
     }
   }
 
@@ -89,7 +109,7 @@ export default function MedicineRestock() {
         />
       )}
 
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={styles.addButton} onPress={createMedicine}>
         <Text style={styles.addButtonText}>Add</Text>
       </TouchableOpacity>
     </View>
