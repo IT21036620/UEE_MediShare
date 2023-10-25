@@ -15,10 +15,18 @@ export default function AddPrescriptionReminder() {
   const [medicationName, setMedicationName] = useState('')
   const [medicationMg, setMedicationMg] = useState('')
   const [pills, setPills] = useState(1)
-  const [duration, setDuration] = useState('10 Days')
+  const [duration, setDuration] = useState('')
   const [reminderTime, setReminderTime] = useState('07:00')
   const [frequency, setFrequency] = useState('Daily')
   const [showTimePicker, setShowTimePicker] = useState(false)
+
+  const getCurrentDate = () => {
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
 
   const handleSubmit = async () => {
     try {
@@ -27,10 +35,11 @@ export default function AddPrescriptionReminder() {
         {
           user: '652f9f9bb85a626a7ccdbc68',
           medicationName: medicationName,
+          date: getCurrentDate(),
           dose: medicationMg,
-          amount: pillsAmount,
+          amount: pills,
           duration: duration,
-          timeSlots: reminderTime,
+          time: reminderTime,
           frequency: frequency,
         }
       )
@@ -98,16 +107,16 @@ export default function AddPrescriptionReminder() {
         </TouchableOpacity>
       </View>
 
-      <TextInput
-        placeholder="Duration"
-        style={styles.input}
-        defaultValue="10 Days"
-        value={duration}
-        onChangeText={setDuration}
-      />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <TextInput
+          placeholder="Duration"
+          style={[styles.input, { flex: 1, marginRight: 10 }]} // added marginRight for spacing
+          defaultValue="10 Days"
+          value={duration}
+          onChangeText={setDuration}
+        />
 
-      <View style={styles.timeContainer}>
-        <View style={styles.formGroup}>
+        <View style={{ flex: 1 }}>
           <TouchableOpacity onPress={() => setShowTimePicker(true)}>
             <Text style={styles.input}>Time: {reminderTime}</Text>
           </TouchableOpacity>
@@ -216,5 +225,41 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '50',
     borderRadius: 10,
+  },
+  frequencyContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+  },
+  frequencyButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    marginHorizontal: 5,
+  },
+  frequencyActive: {
+    backgroundColor: '#667EEA',
+  },
+  frequencyText: {
+    color: '#667EEA',
+    fontWeight: '600',
+  },
+  frequencyActiveText: {
+    color: 'white',
+    fontWeight: '600',
+  },
+  submitButton: {
+    padding: 15,
+    backgroundColor: '#667EEA',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: 'white',
+    fontWeight: '600',
   },
 })

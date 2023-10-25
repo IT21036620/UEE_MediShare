@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Alert,
 } from 'react-native'
 import axios from 'axios'
 
@@ -28,6 +29,37 @@ export default function PrescriptionReminders({ navigation }) {
     fetchData()
   }, [])
 
+  const handleDelete = (reminderId) => {
+    Alert.alert(
+      'Delete Medicine',
+      'Are you sure you want to delete this medicine?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            try {
+              const response = await axios.delete(
+                `http://10.0.2.2:4000/api/v1/reminder/${reminderId}`
+              )
+              if (response.status === 200) {
+                setReminders((prevList) =>
+                  prevList.filter((reminder) => reminder._id !== reminderId)
+                )
+              }
+            } catch (error) {
+              console.error('Error deleting medicine:', error)
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    )
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Prescription Reminders</Text>
@@ -36,7 +68,7 @@ export default function PrescriptionReminders({ navigation }) {
         {reminders.map((reminder, index) => (
           <View key={index} style={styles.listItem}>
             <View style={styles.timeContainer}>
-              <Text style={styles.timeText}>{reminder.timeSlots[0].time}</Text>
+              <Text style={styles.timeText}>{reminder.time}</Text>
 
               <Text style={styles.dateText}>
                 {reminder.date.split('T')[0]}, {reminder.frequency}
@@ -54,7 +86,10 @@ export default function PrescriptionReminders({ navigation }) {
                 <TouchableOpacity style={styles.button}>
                   <Text style={styles.icon}>✏️</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.repeatButton]}>
+                <TouchableOpacity
+                  style={[styles.button, styles.repeatButton]}
+                  onPress={() => handleDelete(reminder._id)}
+                >
                   <Text style={styles.repeatButtontext}>Repeat Never</Text>
                 </TouchableOpacity>
               </View>
