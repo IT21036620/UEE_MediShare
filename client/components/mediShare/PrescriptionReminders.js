@@ -55,7 +55,7 @@ export default function PrescriptionReminders({ navigation }) {
                   <Text style={styles.icon}>✏️</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.button, styles.repeatButton]}>
-                  <Text>Repeat Never</Text>
+                  <Text style={styles.repeatButtontext}>Repeat Never</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -137,7 +137,10 @@ const styles = StyleSheet.create({
   },
   repeatButton: {
     marginLeft: 10,
-    backgroundColor: '#6f93f2',
+    backgroundColor: '#FA5F55',
+  },
+  repeatButtontext: {
+    color: 'white',
   },
   addButton: {
     position: 'absolute',
