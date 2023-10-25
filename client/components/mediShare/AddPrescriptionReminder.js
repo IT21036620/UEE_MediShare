@@ -9,14 +9,16 @@ import {
   Alert,
 } from 'react-native'
 import axios from 'axios'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 export default function AddPrescriptionReminder() {
   const [medicationName, setMedicationName] = useState('')
   const [medicationMg, setMedicationMg] = useState('')
-  const [pillsAmount, setPillsAmount] = useState(2)
+  const [pills, setPills] = useState(1)
   const [duration, setDuration] = useState('10 Days')
   const [reminderTime, setReminderTime] = useState('07:00')
   const [frequency, setFrequency] = useState('Daily')
+  const [showTimePicker, setShowTimePicker] = useState(false)
 
   const handleSubmit = async () => {
     try {
@@ -43,6 +45,14 @@ export default function AddPrescriptionReminder() {
     }
   }
 
+  const onTimeChange = (event, selectedTime) => {
+    if (event.type === 'set' && selectedTime) {
+      const formattedTime = `${selectedTime.getHours()}.${selectedTime.getMinutes()}`
+      setReminderTime(formattedTime)
+    }
+    setShowTimePicker(false)
+  }
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Prescription Reminders</Text>
@@ -60,13 +70,31 @@ export default function AddPrescriptionReminder() {
         onChangeText={setMedicationMg}
       />
 
-      <View style={styles.amountContainer}>
+      {/* <View style={styles.amountContainer}>
         <TouchableOpacity style={styles.amountButton}>
           <Text>+</Text>
         </TouchableOpacity>
         <TextInput defaultValue="2 pills" style={styles.amountInput} />
         <TouchableOpacity style={styles.amountButton}>
           <Text>-</Text>
+        </TouchableOpacity>
+      </View> */}
+
+      <View style={styles.amountContainer}>
+        <TouchableOpacity
+          onPress={() => setPills(pills - 1)}
+          style={styles.amountButton}
+        >
+          <Text>-</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.pillsText}>{pills} pills</Text>
+
+        <TouchableOpacity
+          onPress={() => setPills(pills + 1)}
+          style={styles.amountButton}
+        >
+          <Text>+</Text>
         </TouchableOpacity>
       </View>
 
@@ -79,10 +107,21 @@ export default function AddPrescriptionReminder() {
       />
 
       <View style={styles.timeContainer}>
-        <TextInput placeholder="07:00" style={styles.timeInput} />
-        <TouchableOpacity style={styles.timeButton}>
-          <Text>+ Add</Text>
-        </TouchableOpacity>
+        <View style={styles.formGroup}>
+          <TouchableOpacity onPress={() => setShowTimePicker(true)}>
+            <Text style={styles.input}>Time: {reminderTime}</Text>
+          </TouchableOpacity>
+
+          {showTimePicker && (
+            <DateTimePicker
+              value={new Date()}
+              mode="time"
+              is24Hour={false}
+              display={Platform.OS === 'android' ? 'default' : 'spinner'}
+              onChange={onTimeChange}
+            />
+          )}
+        </View>
       </View>
 
       <View style={styles.frequencyContainer}>
@@ -126,6 +165,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  formGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   input: {
     backgroundColor: 'white',
     padding: 15,
@@ -135,12 +178,17 @@ const styles = StyleSheet.create({
   amountContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 15,
   },
   amountButton: {
     padding: 15,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#f0f0f0',
     borderRadius: 10,
+  },
+  pillsText: {
+    marginHorizontal: 20,
+    fontSize: 16,
   },
   amountInput: {
     flex: 1,
@@ -159,6 +207,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  inputdate: {
+    backgroundColor: 'white',
+    padding: 15,
+    marginBottom: 15,
+    width: '100%',
+    height: '50',
     borderRadius: 10,
   },
 })
