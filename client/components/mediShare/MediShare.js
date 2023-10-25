@@ -84,10 +84,10 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 30,
-    backgroundColor: '#007AFF', // Change this to your desired color
+    backgroundColor: '#4a90e2', // Change this to your desired color
     borderRadius: 10, // This gives it a rounded shape
-    borderWidth: 2,  // Adding border 
-    borderColor: '#007AFF'  // Border color
+    // borderWidth: 2,  // Adding border 
+    // borderColor: '#007AFF'  // Border color
   },
   myPostsText: {
     color: 'white',

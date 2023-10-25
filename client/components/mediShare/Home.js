@@ -1,27 +1,27 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.location}>📍 Moratuwa</Text>
       <Text style={styles.greeting}>Good Morning Ayesha,</Text>
 
       <View style={styles.iconsContainer}>
-        <TouchableOpacity style={styles.iconButton}>
-          <Image source={require('./path/to/icon1.png')} style={styles.icon} />
+        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('MyRequests')}>
+          <Image source={require('../../assets/img/h1.png')} style={styles.icon} />
           <Text>Medicine Availability Requests</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <Image source={require('./path/to/icon2.png')} style={styles.icon} />
+        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Records')}>
+          <Image source={require('../../assets/img/h2.png')} style={styles.icon} />
           <Text>Records</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <Image source={require('./path/to/icon3.png')} style={styles.icon} />
+        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Reminders')}>
+          <Image source={require('../../assets/img/h3.png')} style={styles.icon} />
           <Text>Set Reminders</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <Image source={require('./path/to/icon4.png')} style={styles.icon} />
+        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('MediShareNav')}>
+          <Image source={require('../../assets/img/h4.png')} style={styles.icon} />
           <Text>MediShare</Text>
         </TouchableOpacity>
       </View>
