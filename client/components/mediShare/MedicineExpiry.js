@@ -1,20 +1,62 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Button,
+} from 'react-native'
+import axios from 'axios'
 
-export default function MedicineExpiry() {
+const MedicineExpiry = ({ navigation }) => {
+  const [medicine, setMedicine] = useState([])
+
+  useEffect(() => {
+    fetchMedicine()
+  }, [])
+
+  const fetchMedicine = async () => {
+    try {
+      const response = await axios.get(
+        'http://10.0.2.2:4000/api/v1/stock/user/exp/652f9f9bb85a626a7ccdbc68'
+      )
+      if (response.data && response.data.stock) {
+        setMedicine(response.data.stock)
+      }
+    } catch (error) {
+      console.error('Error fetching Stock:', error)
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Medicine Expiry</Text>
-
-      <View style={styles.medicineCard}>
-        <Text style={styles.alertIcon}>⚠️</Text>
-        <Text style={styles.medicineInfo}>
-          Your, Asprin 25mg tablet is due on 25.09.2023
-        </Text>
-        <TouchableOpacity style={styles.restockButton}>
-          <Text style={styles.restockButtonText}>Restocked</Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {medicine.map((med, index) => (
+          <View key={index} style={styles.medicineCard}>
+            <Text style={styles.alertIcon}>⚠️</Text>
+            <Text style={styles.medicineInfo}>
+              Your {med.medicineName} is due on {med.exp}.
+            </Text>
+            {/* <Button
+              title="Restocked"
+              onPress={() =>
+                navigation.navigate('MedicineRestock', { stockId: data._id })
+              }
+            /> */}
+            <TouchableOpacity
+              style={styles.restockButton}
+              onPress={() =>
+                navigation.navigate('MedicineRestock', {
+                  stockId: med._id,
+                })
+              }
+            >
+              <Text style={styles.restockButtonText}>Restocked</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   )
 }
@@ -33,6 +75,7 @@ const styles = StyleSheet.create({
   medicineCard: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 10,
     padding: 15,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -63,3 +106,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 })
+
+export default MedicineExpiry

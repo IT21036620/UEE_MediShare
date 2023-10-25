@@ -13,6 +13,7 @@ import RecordNavigator from './RecordNavigator.js';
 import RemindersNavigator from './RemindersNavigator.js';
 import MediShareNavigator from './MediShareNavigator.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ProfileNavigator from './ProfileNavigator.js';
 
 const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
@@ -22,7 +23,7 @@ const TabNavigation = () => {
         headerShown:false,
       }}>
         <Tab.Screen
-          name="Home"
+          name="HomeNav"
           component={HomeNavigator}
           options={{
             tabBarIcon: ({color, size}) => (
@@ -59,7 +60,7 @@ const TabNavigation = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={Profile}
+          component={ProfileNavigator}
           options={{
             tabBarIcon: ({color, size}) => (
               <MaterialCommunityIcons name="account" size={size} color={color} />

@@ -1,51 +1,52 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
+  ScrollView,
+  Image,
 } from 'react-native'
+import axios from 'axios'
 
-export default function AppointmentReminders() {
-  const reminders = [
-    {
-      time: '08:30 A.M',
-      date: '28/09/2023',
-      doctor: 'Dr. Kasun Perera',
-      specialty: 'Endocrinologist',
-      appointmentType: 'Diabetes Checkup',
-    },
-    {
-      time: '11:30 A.M',
-      date: '25/09/2023',
-      doctor: 'Dr. Milyuru Nimesh',
-      specialty: 'Dermatologist',
-      appointmentType: 'Skin Treatment',
-    },
-    // ... add other reminders here
-  ]
+export default function AppointmentReminders({ navigation }) {
+  const [appoinments, setAppoinments] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'http://10.0.2.2:4000/api/v1/appointment/user/652f9f9bb85a626a7ccdbc68'
+        )
+        setAppoinments(response.data.appointment)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchData()
+  }, [])
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Appointment Reminders</Text>
-      <TouchableOpacity style={styles.newReminderButton}>
+      <TouchableOpacity
+        style={styles.newReminderButton}
+        onPress={() => navigation.navigate('AddNewReminder')}
+      >
         <Text style={styles.newReminderText}>+ New Reminder</Text>
       </TouchableOpacity>
 
-      <FlatList
-        data={reminders}
-        renderItem={({ item }) => (
+      <ScrollView style={styles.listContainer}>
+        {appoinments.map((appointment, index) => (
           <View style={styles.reminderCard}>
-            <Text style={styles.time}>{item.time}</Text>
-            <Text style={styles.date}>{item.date}</Text>
-            <Text style={styles.doctor}>{item.doctor}</Text>
-            <Text style={styles.specialty}>{item.specialty}</Text>
-            <Text style={styles.appointmentType}>{item.appointmentType}</Text>
+            <Text style={styles.time}>{appointment.time}</Text>
+            <Text style={styles.date}>{appointment.date.split('T')[0]}</Text>
+            <Text style={styles.doctor}>{appointment.doctorName}</Text>
+            <Text style={styles.specialty}>{appointment.doctorType}</Text>
+            <Text style={styles.appointmentType}>{appointment.reason}</Text>
           </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
+        ))}
+      </ScrollView>
     </View>
   )
 }

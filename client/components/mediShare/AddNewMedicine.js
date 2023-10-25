@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import {
   View,
@@ -11,14 +11,12 @@ import {
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
-export default function MedicineRestock() {
+export default function AddNewMedicine() {
   const [pills, setPills] = useState(1)
   const [medicineName, setMedicineName] = useState('')
   const [medicineMg, setMedicineMg] = useState('')
   const [expiryDate, setExpiryDate] = useState(new Date())
   const [showDatePicker, setShowDatePicker] = useState(false)
-
-  const stockID = '6530f525a48b435634e2053c'
 
   const onDateChange = (event, selectedDate) => {
     if (event.type === 'set') {
@@ -34,34 +32,23 @@ export default function MedicineRestock() {
     }
   }
 
-  useEffect(() => {
-    const fetchMedicineData = async () => {
-      try {
-        const response = await axios.get(
-          `http://10.0.2.2:4000/api/v1/stock/${stockID}`
-        )
-        const data = response.data
-        setMedicineName(data.medicineName)
-        setMedicineMg(data.dose)
-        setPills(data.amount)
-        setExpiryDate(new Date(data.exp)) // Assuming the date from API is in a format that's compatible with the JavaScript Date object
-      } catch (error) {
-        console.error('Error fetching medicine data:', error)
-      }
-    }
-
-    fetchMedicineData()
-  }, [])
-
-  const updateMedicine = async () => {
+  const createMedicine = async () => {
     try {
-      await axios.put(`http://localhost:4000/api/v1/stock/${stockID}`, {
-        pills: dose,
-        date: exp,
+      const response = await axios.post('http://10.0.2.2:4000/api/v1/stock', {
+        user: '652f9f9bb85a626a7ccdbc68',
+        medicineName: medicineName,
+        dose: medicineMg,
+        amount: pills,
+        exp: expiryDate,
       })
-      Alert.alert('Success', 'Stock updated successfully.')
+
+      if (response.status === 200) {
+        // Handle success, e.g., show a success message or navigate somewhere
+      } else {
+        console.error('Error creating medicine:', response.data)
+      }
     } catch (error) {
-      console.error('Error updating medicine:', error)
+      console.error('Error creating medicine:', error)
     }
   }
 
@@ -73,14 +60,14 @@ export default function MedicineRestock() {
         style={styles.input}
         placeholder="Medication Name"
         value={medicineName}
-        editable={false} // Making this field readonly
+        onChangeText={setMedicineName}
       />
 
       <TextInput
         style={styles.input}
         placeholder="Medication mg"
         value={medicineMg}
-        editable={false} // Making this field readonly
+        onChangeText={setMedicineMg}
         keyboardType="number-pad"
       />
 
@@ -121,8 +108,8 @@ export default function MedicineRestock() {
         />
       )}
 
-      <TouchableOpacity style={styles.addButton} onPress={updateMedicine}>
-        <Text style={styles.addButtonText}>Update</Text>
+      <TouchableOpacity style={styles.addButton} onPress={createMedicine}>
+        <Text style={styles.addButtonText}>Add</Text>
       </TouchableOpacity>
     </View>
   )
