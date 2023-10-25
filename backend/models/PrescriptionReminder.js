@@ -38,18 +38,14 @@ const PrescriptionReminderSchema = new Schema(
       required: [true, 'Please provide frequency'],
       trim: true,
     },
-    timeSlots: [
-      {
-        time: {
-          type: String,
-          required: [true, 'Please provide appointment time'],
-        },
-        alarmStatus: {
-          type: Boolean,
-          default: true,
-        },
-      },
-    ],
+    time: {
+      type: String,
+      required: [true, 'Please provide appointment time'],
+    },
+    alarmStatus: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 )
