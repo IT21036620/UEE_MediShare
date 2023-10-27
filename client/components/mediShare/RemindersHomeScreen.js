@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 20,
-    marginTop: 50,
+    marginTop: 5,
   },
   tile: {
     backgroundColor: '#6f93f2',
