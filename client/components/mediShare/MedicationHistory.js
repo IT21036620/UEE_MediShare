@@ -8,7 +8,13 @@ import {
 } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
 
-const MedicationCard = ({ date, title, doctor, status }) => (
+const MedicationCard = ({
+  date,
+  title,
+  doctor,
+  status,
+  onPrescriptionPress,
+}) => (
   <View style={styles.card}>
     <Text style={styles.date}>{date}</Text>
     <Text style={styles.title}>{title}</Text>
@@ -16,18 +22,24 @@ const MedicationCard = ({ date, title, doctor, status }) => (
       <FontAwesome5 name="user-md" size={16} color="#2E8B57" />
       <Text style={styles.doctorName}> {doctor}</Text>
     </View>
-    <TouchableOpacity style={styles.prescriptionButton}>
+    <TouchableOpacity
+      style={styles.prescriptionButton}
+      onPress={onPrescriptionPress}
+    >
       <Text style={styles.prescriptionText}>Prescription</Text>
     </TouchableOpacity>
     <Text style={styles.status}>{status}</Text>
   </View>
 )
 
-export default function MedicationHistory() {
+export default function MedicationHistory({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Medication History</Text>
-      <TouchableOpacity style={styles.newMedicationButton}>
+      <TouchableOpacity
+        style={styles.newMedicationButton}
+        onPress={() => navigation.navigate('AddNewMedication')}
+      >
         <Text style={styles.newMedicationText}>+ New Medication</Text>
       </TouchableOpacity>
       {/* Sample Medication Cards */}
@@ -36,12 +48,14 @@ export default function MedicationHistory() {
         title="Diabetes Checkup"
         doctor="Dr. Kasun Perera"
         status="Ongoing"
+        onPrescriptionPress={() => navigation.navigate('Prescription')}
       />
       <MedicationCard
         date="04/09/2023"
         title="Allergic Reaction"
         doctor="Dr. Rivindu Fernando"
         status="Effective"
+        onPrescriptionPress={() => navigation.navigate('Prescription')}
       />
       {/* ... Add more cards as needed */}
     </ScrollView>

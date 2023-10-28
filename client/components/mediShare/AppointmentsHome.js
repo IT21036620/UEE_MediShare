@@ -18,7 +18,7 @@ export default function Appointments({ navigation }) {
 
       <TouchableOpacity
         style={styles.tile}
-        onPress={() => navigation.navigate('AppoinmentReminders')}
+        onPress={() => navigation.navigate('MedicationHistory')}
       >
         <Text style={styles.icon}>💊</Text>
         <Text style={styles.tileText}>Medication History</Text>
